@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Time Machine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<nav class="bg-blue-600 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center space-x-2">
+                <div class="text-2xl">🌡️</div>
+                <h1 class="text-xl font-bold text-white">Climate Time Machine</h1>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- HTMX Debug Script -->
+<script>
+    // Check if HTMX is loaded
+    console.log('HTMX loaded:', typeof htmx !== 'undefined');
+
+    // Add HTMX event listeners for debugging
+    document.addEventListener('htmx:beforeRequest', function(evt) {
+        console.log('HTMX Request starting:', evt.detail.xhr.responseURL);
+    });
+
+    document.addEventListener('htmx:afterRequest', function(evt) {
+        console.log('HTMX Request completed:', evt.detail.xhr.status);
+    });
+
+    document.addEventListener('htmx:responseError', function(evt) {
+        console.log('HTMX Error:', evt.detail);
+    });
+</script>
+</body>
+</html>

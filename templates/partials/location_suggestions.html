@@ -1,0 +1,51 @@
+{% if locations %}
+<div class="bg-white border border-gray-200 rounded-lg shadow-lg">
+  {% for location in locations %}
+  <div class="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 location-item"
+       data-lat="{{ location.latitude }}"
+       data-lng="{{ location.longitude }}"
+       data-name="{{ location.display_name }}"
+       hx-get="/compare/?lat={{ location.latitude }}&lng={{ location.longitude }}&name={{ location.display_name|urlencode }}"
+       hx-target="#comparison-results"
+       hx-swap="innerHTML"
+       onclick="handleLocationClick(this)">
+    <div class="font-medium text-gray-900">{{ location.name }}</div>
+    <div class="text-sm text-gray-600">{{ location.country }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  function handleLocationClick(element) {
+    console.log('Location clicked:', element.dataset);
+
+    // Clear suggestions
+    document.getElementById('location-suggestions').innerHTML = '';
+
+    // Show loading message
+    document.getElementById('comparison-results').innerHTML = '<div class="bg-white rounded-lg shadow-lg p-8 text-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div><p class="text-gray-600">Loading climate data...</p></div>';
+
+    // Manual fetch as fallback if HTMX fails
+    const url = `/compare/?lat=${element.dataset.lat}&lng=${element.dataset.lng}&name=${encodeURIComponent(element.dataset.name)}`;
+    console.log('Fetching:', url);
+
+    fetch(url, {
+      headers: {
+        'HX-Request': 'true'
+      }
+    })
+            .then(response => {
+              console.log('Response status:', response.status);
+              return response.text();
+            })
+            .then(html => {
+              console.log('Response received, length:', html.length);
+              document.getElementById('comparison-results').innerHTML = html;
+            })
+            .catch(error => {
+              console.error('Fetch error:', error);
+              document.getElementById('comparison-results').innerHTML = '<div class="bg-red-100 p-4 rounded">Error loading data</div>';
+            });
+  }
+</script>
+{% endif %}

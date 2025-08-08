@@ -1,0 +1,25 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtualenv
+venv/
+
+# Django
+db.sqlite3
+/static/
+
+# Environment Variables
+.env
+
+# IDEs/Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel/
+.vercel.json
